@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div>
-      <h1>Test Frontend!</h1>
+      <h1>Testing Frontend!</h1>
       <pre>{JSON.stringify(message, null, 2)}</pre>
     </div>
   );
