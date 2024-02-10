@@ -1,7 +1,9 @@
 import * as React from "react";
 import SignUpForm from "./SignUpForm";
 
-const signUpPage = ({ onSignUp }) => {
+const SignUpPage = ({ onSignUp }) => {
+  const [error, setError] = React.useState(null);
+
   const handleSignUp = async (userData) => {
     try {
       const response = await fetch("/signup", {
@@ -12,25 +14,26 @@ const signUpPage = ({ onSignUp }) => {
         body: JSON.stringify(userData),
       });
 
-      if (!response.ok) {
+      if (response.ok) {
+        onSignUp();
+      } else {
         const errorMessage = await response.text();
-        throw new Error(errorMessage);
+        console.error("Error al registrar usuario:", errorMessage);
+        setError(errorMessage);
       }
-
-      // Si la respuesta es exitosa, ejecutar la función onSignUp proporcionada
-      onSignUp();
     } catch (error) {
-      console.error("Error al registrar usuario:", error.message);
-      // Aquí puedes mostrar un mensaje de error al usuario si lo deseas
+      console.error("Error al realizar la solicitud:", error);
+      setError("Error al realizar la solicitud");
     }
   };
 
   return (
     <div>
       <h2>Sign Up</h2>
+      {error && <p>Error al registrar usuario: {error}</p>}
       <SignUpForm onSubmit={handleSignUp} />
     </div>
   );
 };
 
-export default signUpPage;
+export default SignUpPage;
